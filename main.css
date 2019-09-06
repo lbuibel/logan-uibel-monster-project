@@ -1,3 +1,6 @@
+
+
+
 .text-center {
     text-align: center;
 }
@@ -8,6 +11,7 @@
     background-color: #eee;
     margin: auto;
     transition: width 500ms;
+    border-radius: 20px;
 }
 
 .controls, .log {
