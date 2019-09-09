@@ -4,34 +4,34 @@
 
     <div id="oponent">
       <div id=oponentInfo>
-        <h1 class="text-left"> {{monsterName}}</h1>
+        <h1 class="text-left"> {{ monsterName }}</h1>
         <div class="healthbar">
           <div
            class="healthbar text-center"
-            style="background-color: #5B5B5B; margin: 0; color: black; padding-top: 30px; font-size: 2rem;"
+            style="background-color: #5B5B5B; margin: 0; color: black; padding-top: 30px; font-size: 1rem;"
             :style="{width: playerHealth + '%'}">
-            HP {{ playerHealth }} / 100
+            HP {{ playerHealth }}
         </div>
         </div>
       </div>
       <div class="oponent-image">
-        <img v-bind:src="pokeImage" alt="none">
+          <img v-bind:src = "image1" alt="none">
       </div>
     </div>
 
   <div>
     <div id="oponent">
-          <div class="player-image">
-      <img v-bind:src="pokeImage" alt="none">
-    </div>
+        <div class="player-image" id="app3">
+          <img v-bind:src = "image2" alt="none">
+        </div>
       <div id="playerInfo">
         <h1 class="text-right"> {{playerName}}</h1>
         <div class="healthbar">
           <div
             class="healthbar text-center"
-            style="background-color: #5B5B5B; margin: 0; color: black; padding-top: 30px; font-size: 2rem;"
+            style="background-color: #5B5B5B; margin: 0; color: black; padding-top: 30px; font-size: 1rem;"
             :style="{width: monsterHealth + '%'}">
-            HP {{ monsterHealth }} / 100
+            HP {{ monsterHealth }}
           </div>
         </div>
       </div>
@@ -41,7 +41,7 @@
   <section v-if="!gameIsRunning">
     <div class="player-input">
       <div id="battle-alert">
-     <h1>Wild {{monsterName}}<br> appeared!</h1>
+     <h1>Wild {{ monsterName }} appeared!</h1>
     </div> 
       <div id="start-buttons">
         <button id="attack" @click="fight">FIGHT</button>
@@ -103,50 +103,47 @@
 
 -->
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+// import HelloWorld from './components/HelloWorld.vue'
 import { pokemon } from './assets/pokedex'
 
-
-console.log(pokemon[1].id)
 
 let player1 = Math.floor(Math.random() * 151) + 0;
 let player2 = Math.floor(Math.random() * 151) + 0;
 
-let pokemonImage = `file://assets/images/${player1 + 1}.png`;
+let randomImage = `images/${player1 + 1}.png`;
+let randomImage2 = `images/${player2 + 1}.png`;
 
-console.log(pokemonImage)
-console.log(pokemon[player1].name.english)
 
-var audio = new Audio('file://assets/victory_theme.ogg');
+let hp = pokemon[player1].base.HP;
+let attack = pokemon[player1].base.Attack;
+
+console.log(`${pokemon[player1].name.english} HP: ${hp}`)
+console.log(`${pokemon[player1].name.english} HP: ${attack}`)
+console.log(randomImage)
+
 
 export default {
   name: 'app',
   components: {
-    HelloWorld
   },
   data: function () {
     return {
         playerName: pokemon[player1].name.english,
         monsterName: pokemon[player2].name.english,
-        playerHealth: 100,
-        monsterHealth: 100,
+        playerHealth: hp,
+        monsterHealth: hp,
         gameIsRunning: false,
         turns: [],
-        pokeImage: pokemonImage,
+        image1: randomImage2,
+        image2: randomImage,
     }
   },
     methods: {
-        playVictoryTrack: function () {
-          audio.play();
-        },
         startGame: function () {
             this.gameIsRunning = false;
-            this.playerHealth = 100;
-            this.monsterHealth = 100;
+            this.playerHealth = hp;
+            this.monsterHealth = hp;
             this.turns = [];
-        },
-        image: function () {
-          return `assets/images/${player1}.png`
         },
         fight: function () {
           this.gameIsRunning = true;
@@ -177,10 +174,10 @@ export default {
             this.monsterAttacks();
         },
         heal: function () {
-            if (this.playerHealth <= 90) {
+            if (this.playerHealth <= hp) {
                 this.playerHealth += 10;
             } else {
-                this.playerHealth = 100;
+                this.playerHealth = hp;
             }
             this.turns.unshift({
                 isPlayer: true,
@@ -220,10 +217,11 @@ export default {
                 return true;
             }
             return false;
-        }
-  
+        },
     }
 }
+
+
 </script>
 
 <style>
@@ -265,21 +263,17 @@ h1 {
 }
 
 .oponent-image {
-  border: solid red;
   height: 175px;
   width: 40%;
   float: right;
   margin-right: 5%;
 }
-.oponent-image img {
-  border: solid yellow;
-    height: 175px;
-    width: 40%;
-
+img {
+  height: 175px;
+  width: auto;
 }
 
 .player-image {
-  border: solid red;
   height: 175px;
   width: 40%;
   float: left;
