@@ -2,16 +2,90 @@
 
   <div id="app">
 
+
+    <section v-if="!gameIsRunning">
+      <div id="decisionCard">
+        <v-card
+        width = "50%"
+        >
+        </v-card>
+        </div>
+
+    </section>
+    <div class="container">
+
+    <!------------ Monster Card ------------>
+    <div id="monsterCard">
+      <v-card
+        max-width = "40vw"
+      >
+      <v-card-title> {{ monsterName }}</v-card-title>
+      <v-img class="cardImage"
+      height = "auto"
+      width = "50%"
+      v-bind:src = "image1"
+      ></v-img>
+      </v-card>
+
+        <v-progress-linear
+          background-color="#ffc0c1"
+          color="#1697F6"
+          height="20"
+          v-model= monsterHealth
+          striped
+          rounded
+          reactive
+          ></v-progress-linear>
+          HP {{ playerHealth }}
+    </div>
+
+    <!------------ Player Card ------------>
+
+    <div id="playerCard">
+      <v-card
+        max-width = "40vw"
+      >
+      <v-card-title> {{ playerName }}</v-card-title>
+      <v-img class="cardImage"
+      height = "auto"
+      width = "50%"
+      v-bind:src = "image2"
+      ></v-img>
+
+      </v-card>
+
+        <v-progress-linear
+          background-color="#ffc0c1"
+          color="#1697F6"
+          height="20"
+          v-model= monsterHealth
+          striped
+          rounded
+          reactive
+          ></v-progress-linear>
+          HP {{ monsterHealth }}
+    </div>
+
+    </div> <!-- Container Ends -->
+
+
+<!--
     <div id="oponent">
       <div id=oponentInfo>
         <h1 class="text-left"> {{ monsterName }}</h1>
         <div class="healthbar">
-          <div
-           class="healthbar text-center"
-            style="background-color: #5B5B5B; margin: 0; color: black; padding-top: 30px; font-size: 1rem;"
-            :style="{width: playerHealth + '%'}">
-            HP {{ playerHealth }}
-        </div>
+        <div>
+              <v-progress-linear
+                background-color="#ffc0c1"
+                color="#1697F6"
+                height="20"
+                v-model= playerHealth
+                striped
+                rounded
+                reactive
+              ></v-progress-linear>
+              HP {{ playerHealth }}
+          </div>
         </div>
       </div>
       <div class="oponent-image">
@@ -27,17 +101,23 @@
       <div id="playerInfo">
         <h1 class="text-right"> {{playerName}}</h1>
         <div class="healthbar">
-          <div
-            class="healthbar text-center"
-            style="background-color: #5B5B5B; margin: 0; color: black; padding-top: 30px; font-size: 1rem;"
-            :style="{width: monsterHealth + '%'}">
-            HP {{ monsterHealth }}
+          <div>
+              <v-progress-linear
+                background-color="#ffc0c1"
+                color="#1697F6"
+                height="20"
+                v-model= monsterHealth
+                striped
+                rounded
+                reactive
+              ></v-progress-linear>
+              HP {{ monsterHealth }}
           </div>
         </div>
       </div>
     </div>
   </div>
-
+-->
   <section v-if="!gameIsRunning">
     <div class="player-input">
       <div id="battle-alert">
@@ -59,8 +139,16 @@
         <button id="heal" @click="heal">HEAL</button>
       </div>
 
+      <v-col>
+      <div class="my-2">
+        <v-btn large color="red.base" @click="specialAttack">Text Button</v-btn>
+      </div>
+      </v-col>
+
     </div>
   </section>
+
+
 
   </div>
 
@@ -103,9 +191,13 @@
 
 -->
 <script>
-// import HelloWorld from './components/HelloWorld.vue'
+//import HelloWorld from './components/HelloWorld.vue'
 import { pokemon } from './assets/pokedex'
+import colors from 'vuetify/lib/util/colors'
 
+import {VApp, VBtn, VCol} from 'vuetify/lib'
+
+console.log(colors)
 
 let player1 = Math.floor(Math.random() * 151) + 0;
 let player2 = Math.floor(Math.random() * 151) + 0;
@@ -125,24 +217,27 @@ console.log(randomImage)
 export default {
   name: 'app',
   components: {
+    VApp,
+    VBtn,
+    VCol,
   },
   data: function () {
     return {
         playerName: pokemon[player1].name.english,
         monsterName: pokemon[player2].name.english,
-        playerHealth: hp,
-        monsterHealth: hp,
+        playerHealth: 100,
+        monsterHealth: 100,
         gameIsRunning: false,
         turns: [],
         image1: randomImage2,
         image2: randomImage,
     }
-  },
+    },
     methods: {
         startGame: function () {
-            this.gameIsRunning = false;
-            this.playerHealth = hp;
-            this.monsterHealth = hp;
+            this.gameIsRunning = true;
+            this.playerHealth = 100;
+            this.monsterHealth = 100;
             this.turns = [];
         },
         fight: function () {
@@ -153,7 +248,7 @@ export default {
             this.monsterHealth -= damage;
             this.turns.unshift({
                 isPlayer: true,
-                text: `${this.playerName} hits ${this.monsterName} for ` + damage
+                text: 'Player hits Monster for ' + damage
             });
             if (this.checkWin()) {
                 return;
@@ -161,12 +256,13 @@ export default {
 
             this.monsterAttacks();
         },
-        specialAttack: function () {
+       specialAttack: function () {
             var damage = this.calculateDamage(10, 20);
             this.monsterHealth -= damage;
+            console.log("monster health is " + this.monsterHealth)
             this.turns.unshift({
                 isPlayer: true,
-                text: `${this.playerName} used special attack on ${this.monsterName} for ` + damage
+                text: 'Player hits Monster hard for ' + damage
             });
             if (this.checkWin()) {
                 return;
@@ -174,14 +270,14 @@ export default {
             this.monsterAttacks();
         },
         heal: function () {
-            if (this.playerHealth <= hp) {
+            if (this.playerHealth <= 90) {
                 this.playerHealth += 10;
             } else {
-                this.playerHealth = hp;
+                this.playerHealth = 100;
             }
             this.turns.unshift({
                 isPlayer: true,
-                text: `${this.playerName} heals for 10`
+                text: 'Player heals for 10'
             });
             this.monsterAttacks();
         },
@@ -194,7 +290,7 @@ export default {
             this.checkWin();
             this.turns.unshift({
                 isPlayer: false,
-                text: `${this.monsterName} hits ${this.playerName} for ` + damage
+                text: 'Monster hits Player for ' + damage
             });
         },
         calculateDamage: function(min, max) {
@@ -225,6 +321,31 @@ export default {
 </script>
 
 <style>
+.container {
+  width: 80vw;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  justify-content: center;
+}
+
+#monsterCard {
+  width: 45%;
+  margin-right: 2%;
+  margin-bottom: 1%;
+}
+#playerCard {
+  width: 45%;
+    margin-bottom: 1%;
+}
+
+.cardImage {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+
 
 #app {
   font-family: 'VT323', monospace;
@@ -247,7 +368,6 @@ h1 {
 #oponent {
   display: inline-block;
   width: 100%;
-  margin-bottom: 20px;
 }
 
 #oponentInfo {
@@ -338,7 +458,6 @@ img {
 .healthbar {
     width: 90%;
     height: 30px;
-    background-color: #eee;
     margin: auto;
     transition: width 500ms;
     border-radius: 15px;
