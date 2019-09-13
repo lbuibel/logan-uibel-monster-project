@@ -25,12 +25,12 @@
             background-color="#ffc0c1"
             color="#1697F6"
             height="20"
-            v-model= monsterHealth
+            v-model= playerHealth
             striped
             rounded
             reactive
             ></v-progress-linear>
-            HP {{ monsterHealth }}
+            HP {{ playerHealth }}
     </div>
 
     <div id="monsterCard">
@@ -55,7 +55,7 @@
           rounded
           reactive
           ></v-progress-linear>
-          HP {{ playerHealth }}
+          HP {{ monsterHealth }}
     </div>
  
     </div> 
@@ -97,10 +97,10 @@
           class="headline grey lighten-2"
           primary-title
           >
-          Privacy Policy
+          You're about to quit
           </v-card-title>
 
-          <v-card-text> You Sure?
+          <v-card-text> You sure you want to go through with this?
           </v-card-text>
 
           <v-divider></v-divider>
@@ -109,10 +109,10 @@
             <div class="flex-grow-1"></div>
               <v-btn
               color="#03A9F4"
-              text
+              outlined
               @click="reload"
             >
-            Run
+            Give Up
             </v-btn>
           </v-card-actions>
         </v-card>
@@ -138,9 +138,6 @@
 
 </template>
 
-
-
--->
 <script>
 import { pokemon } from './assets/pokedex'
 import colors from 'vuetify/lib/util/colors'
@@ -152,11 +149,6 @@ let player2 = Math.floor(Math.random() * 151) + 0;
 
 let randomImage = `images/${player1 + 1}.png`;
 let randomImage2 = `images/${player2 + 1}.png`;
-
-let hp = pokemon[player1].base.HP;
-let attack = pokemon[player1].base.Attack;
-
-
 
 export default {
   name: 'app',
@@ -215,10 +207,10 @@ export default {
             this.monsterAttacks();
         },
         heal: function () {
-            if (this.monsterHealth <= 90) {
-                this.monsterHealth += 10;
+            if (this.playerHealth <= 90) {
+                this.playerHealth += 10;
             } else {
-                this.monsterHealth = 100;
+                this.playerHealth = 100;
             }
             this.turns.unshift({
                 isPlayer: true,
@@ -277,13 +269,10 @@ export default {
   justify-content: center;
   font-size: 1.5rem;
 }
-#card-container {
-  width: 100%;
-  border: solid red;
-}
+
 
 #monsterCard {
-  width: 45%;
+  width: 50%;
   margin-left: 2%;
   margin-bottom: 1%;
 }
@@ -295,12 +284,7 @@ export default {
 .cardImage {
   margin-left: auto;
   margin-right: auto;
-  padding-bottom: 2%;
-  height: 400px;
 }
-
-
-
 
 #app {
   font-family: 'VT323', monospace;
@@ -314,35 +298,7 @@ export default {
   padding-top: 5%;
 }
 
-h1 {
-  margin-bottom: 5px;
-  font-size: 2rem;
-  margin-top: 0;
-}
 
-#oponent {
-  display: inline-block;
-  width: 100%;
-}
-
-#oponentInfo {
-  float: left;
-  width: 50%;
-  padding-bottom: 10px;
-}
-#playerInfo {
-  float: right;
-  width: 50%;
-  padding-bottom: 20px;
-  margin-top: 60px;
-}
-
-.oponent-image {
-  height: 150px;
-  width: 40%;
-  float: right;
-  margin-right: 5%;
-}
 
 .controls, .log {
     margin-top: 30px;
