@@ -3,29 +3,48 @@
   <div id="app">
 
 
-    <section v-if="!gameIsRunning">
-      <div id="decisionCard">
-        <v-card
-        width = "50%"
-        >
-        </v-card>
-        </div>
-
-    </section>
     <div class="container">
 
-    <!------------ Monster Card ------------>
+    <!------------ Pokemon Card ------------>
+    <div id="playerCard">
+        <v-card
+          max-width = "40vw"
+          height = "300px"
+
+        >
+        <v-card-title> {{ playerName }}</v-card-title>
+        <v-img class="cardImage"
+        height = "auto"
+        width = "50%"
+        v-bind:src = "image2"
+        ></v-img>
+
+        </v-card>
+
+          <v-progress-linear
+            background-color="#ffc0c1"
+            color="#1697F6"
+            height="20"
+            v-model= monsterHealth
+            striped
+            rounded
+            reactive
+            ></v-progress-linear>
+            HP {{ monsterHealth }}
+    </div>
+
     <div id="monsterCard">
       <v-card
         max-width = "40vw"
-      >
-      <v-card-title> {{ monsterName }}</v-card-title>
-      <v-img class="cardImage"
-      height = "auto"
-      width = "50%"
-      v-bind:src = "image1"
-      ></v-img>
-      </v-card>
+        height = "300px"
+        >
+        <v-card-title> {{ monsterName }}</v-card-title>
+        <v-img class="cardImage"
+        height = "auto"
+        width = "50%"
+        v-bind:src = "image1"
+        ></v-img>
+        </v-card>
 
         <v-progress-linear
           background-color="#ffc0c1"
@@ -38,141 +57,70 @@
           ></v-progress-linear>
           HP {{ playerHealth }}
     </div>
-
-    <!------------ Player Card ------------>
-
-    <div id="playerCard">
-      <v-card
-        max-width = "40vw"
-      >
-      <v-card-title> {{ playerName }}</v-card-title>
-      <v-img class="cardImage"
-      height = "auto"
-      width = "50%"
-      v-bind:src = "image2"
-      ></v-img>
-
-      </v-card>
-
-        <v-progress-linear
-          background-color="#ffc0c1"
-          color="#1697F6"
-          height="20"
-          v-model= monsterHealth
-          striped
-          rounded
-          reactive
-          ></v-progress-linear>
-          HP {{ monsterHealth }}
-    </div>
-
-    </div> <!-- Container Ends -->
-
-
-<!--
-    <div id="oponent">
-      <div id=oponentInfo>
-        <h1 class="text-left"> {{ monsterName }}</h1>
-        <div class="healthbar">
-        <div>
-              <v-progress-linear
-                background-color="#ffc0c1"
-                color="#1697F6"
-                height="20"
-                v-model= playerHealth
-                striped
-                rounded
-                reactive
-              ></v-progress-linear>
-              HP {{ playerHealth }}
-          </div>
-        </div>
-      </div>
-      <div class="oponent-image">
-          <img v-bind:src = "image1" alt="none">
-      </div>
-    </div>
-
-  <div>
-    <div id="oponent">
-        <div class="player-image" id="app3">
-          <img v-bind:src = "image2" alt="none">
-        </div>
-      <div id="playerInfo">
-        <h1 class="text-right"> {{playerName}}</h1>
-        <div class="healthbar">
-          <div>
-              <v-progress-linear
-                background-color="#ffc0c1"
-                color="#1697F6"
-                height="20"
-                v-model= monsterHealth
-                striped
-                rounded
-                reactive
-              ></v-progress-linear>
-              HP {{ monsterHealth }}
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
--->
-  <section v-if="!gameIsRunning">
-    <div class="player-input">
-      <div id="battle-alert">
-     <h1>Wild {{ monsterName }} appeared!</h1>
+ 
     </div> 
-      <div id="start-buttons">
-        <button id="attack" @click="fight">FIGHT</button>
-        <button id="give-up" @click="giveUp">RUN</button>
+    <!-- Container Ends -->
+
+
+    <!-- Start Battle Prompt -->
+    <section v-if="!gameIsRunning">
+      <v-banner
+        width= "95%"
+        class = "container">
+        A wild {{ monsterName }} appeared!<br>What would you like to do?
+        <template v-slot:actions>
+          <v-btn large rounded color="#F44336" @click="fight">ATTACK!</v-btn>
+          <v-btn large rounded color="000000" @click="reload">RUN</v-btn>
+        </template>
+      </v-banner>
+    </section>
+
+    <!-- Battle Buttons -->
+    <section v-else>
+      <v-btn large rounded color="#F44336" @click="attack">ATTACK</v-btn>
+      <v-btn large rounded color="#FF9800" @click="specialAttack">SPECIAL ATTACK </v-btn>
+      <v-btn large rounded color="#4CAF50" @click="heal">HEAL</v-btn>
+
+    <!-- Dialog box for running -->
+      <div class="text-center">
+        <v-dialog
+        v-model="dialog"
+        width="500"
+        >
+        <template v-slot:activator="{ on }">
+          <v-btn large rounded color="#fefefe" @click="giveUp" v-on="on">GIVE UP</v-btn>
+
+        </template>
+
+        <v-card>
+        <v-card-title
+          class="headline grey lighten-2"
+          primary-title
+          >
+          Privacy Policy
+          </v-card-title>
+
+          <v-card-text> You Sure?
+          </v-card-text>
+
+          <v-divider></v-divider>
+
+          <v-card-actions>
+            <div class="flex-grow-1"></div>
+              <v-btn
+              color="#03A9F4"
+              text
+              @click="reload"
+            >
+            Run
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+       </v-dialog>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section v-else>
-    <div class="battle-input">
-      <div id="battle-buttons">
-        <button id="attack" @click="attack">ATTACK</button>
-        <button id="special-attack" @click="specialAttack">SPECIAL ATTACK</button>
-        <button id="give-up" @click="giveUp">GIVE UP</button>
-        <button id="heal" @click="heal">HEAL</button>
-      </div>
-
-      <v-col>
-      <div class="my-2">
-        <v-btn large color="red.base" @click="specialAttack">Text Button</v-btn>
-      </div>
-      </v-col>
-
-    </div>
-  </section>
-
-
-
-  </div>
-
-
-
-</template>
-
-<!--
-<template>
-  <div id="app">
-
-      <section class="row controls" v-if="!gameIsRunning">
-          <div class="small-12 columns">
-              <button id="start-game" @click="startGame">START NEW GAME</button>
-          </div>
-      </section>
-      <section class="row controls" v-else>
-          <div class="small-12 columns">
-              <button id="attack" @click="attack">ATTACK</button>
-              <button id="special-attack" @click="specialAttack">SPECIAL ATTACK</button>
-              <button id="heal" @click="heal">HEAL</button>
-              <button id="give-up" @click="giveUp">GIVE UP</button>
-          </div>
-      </section>
+    <!-- Attack Summary -->
       <section class="row log" v-if="turns.length > 0">
           <div class="small-12 columns">
               <ul>
@@ -184,20 +132,20 @@
               </ul>
           </div>
       </section>
+
   </div>
 
 
 </template>
 
+
+
 -->
 <script>
-//import HelloWorld from './components/HelloWorld.vue'
 import { pokemon } from './assets/pokedex'
 import colors from 'vuetify/lib/util/colors'
-
 import {VApp, VBtn, VCol} from 'vuetify/lib'
 
-console.log(colors)
 
 let player1 = Math.floor(Math.random() * 151) + 0;
 let player2 = Math.floor(Math.random() * 151) + 0;
@@ -205,13 +153,9 @@ let player2 = Math.floor(Math.random() * 151) + 0;
 let randomImage = `images/${player1 + 1}.png`;
 let randomImage2 = `images/${player2 + 1}.png`;
 
-
 let hp = pokemon[player1].base.HP;
 let attack = pokemon[player1].base.Attack;
 
-console.log(`${pokemon[player1].name.english} HP: ${hp}`)
-console.log(`${pokemon[player1].name.english} HP: ${attack}`)
-console.log(randomImage)
 
 
 export default {
@@ -231,6 +175,7 @@ export default {
         turns: [],
         image1: randomImage2,
         image2: randomImage,
+        stillPlaying: true,
     }
     },
     methods: {
@@ -270,19 +215,22 @@ export default {
             this.monsterAttacks();
         },
         heal: function () {
-            if (this.playerHealth <= 90) {
-                this.playerHealth += 10;
+            if (this.monsterHealth <= 90) {
+                this.monsterHealth += 10;
             } else {
-                this.playerHealth = 100;
+                this.monsterHealth = 100;
             }
             this.turns.unshift({
                 isPlayer: true,
-                text: 'Player heals for 10'
+                text: 'player heals for 10'
             });
             this.monsterAttacks();
         },
         giveUp: function () {
-            location.reload();
+            this.stillPlaying = false;
+        },
+        reload: function () {
+          location.reload();
         },
         monsterAttacks: function() {
             var damage = this.calculateDamage(5, 12);
@@ -290,7 +238,7 @@ export default {
             this.checkWin();
             this.turns.unshift({
                 isPlayer: false,
-                text: 'Monster hits Player for ' + damage
+              text: 'Monster hits Player for ' + damage
             });
         },
         calculateDamage: function(min, max) {
@@ -327,21 +275,28 @@ export default {
   margin-right: auto;
   display: flex;
   justify-content: center;
+  font-size: 1.5rem;
+}
+#card-container {
+  width: 100%;
+  border: solid red;
 }
 
 #monsterCard {
   width: 45%;
-  margin-right: 2%;
+  margin-left: 2%;
   margin-bottom: 1%;
 }
 #playerCard {
   width: 45%;
-    margin-bottom: 1%;
+  margin-bottom: 1%;
 }
 
 .cardImage {
   margin-left: auto;
   margin-right: auto;
+  padding-bottom: 2%;
+  height: 400px;
 }
 
 
@@ -383,85 +338,10 @@ h1 {
 }
 
 .oponent-image {
-  height: 175px;
+  height: 150px;
   width: 40%;
   float: right;
   margin-right: 5%;
-}
-img {
-  height: 175px;
-  width: auto;
-}
-
-.player-image {
-  height: 175px;
-  width: 40%;
-  float: left;
-  margin-left: 5%
-}
-
-.player-input {
-  width: 100%;
-  padding: 5px;
-  margin-top: 20px;
-  border: solid 10px black;
-  border-style: double;
-  border-radius: 5px;
-  display: inline-block;
-}
-
-#battle-buttons {
-  width: 50%;
-}
-
-#battle-buttons button {
-  font-size: 2rem;
-}
-
-.battle-input {
-  width: 100%;
-  border: solid 10px black;
-  border-style: double;
-  border-radius: 5px;
-  margin-top: 20px;
-  padding: 5px;
-}
-
-.player-input h1 {
-  text-align: left;
-}
-
-#battle-alert {
-  float: left;
-}
-
-#start-buttons {
-  float: right;
-  display: block;
-}
-
-.text-center {
-    text-align: center;
-}
-
-.text-left {
-  text-align: left;
-  padding-left: 5%;
-}
-
-.text-right {
-  text-align: right;
-  padding-right: 5%;
-}
-
-
-.healthbar {
-    width: 90%;
-    height: 30px;
-    margin: auto;
-    transition: width 500ms;
-    border-radius: 15px;
-    margin-left: 5%;
 }
 
 .controls, .log {
@@ -500,54 +380,9 @@ img {
 }
 
 button {
-    font-size: 3rem;
-    background-color: #eee;
     padding: 12px;
-    box-shadow: 0 1px 1px black;
     margin: 10px;
 }
 
-#start-game {
-    background-color: #aaffb0;
-}
 
-#start-game:hover {
-    background-color: #76ff7e;
-}
-
-#attack {
-    background-color: #ff7367;
-}
-
-#attack:hover {
-    background-color: #ff3f43;
-}
-
-#special-attack {
-    background-color: #ffaf4f;
-}
-
-#special-attack:hover {
-    background-color: #ff9a2b;
-}
-
-#heal {
-    background-color: #aaffb0;
-}
-
-#heal:hover {
-    background-color: #76ff7e;
-}
-
-#give-up {
-    background-color: #ffffff;
-}
-
-#give-up:hover {
-    background-color: #c7c7c7;
-}
-.poke-img {
-  height: 300px;
-  border: solid red;
-}
 </style>
