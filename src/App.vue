@@ -1,8 +1,6 @@
 <template>
 
   <div id="app">
-
-
     <div class="container">
 
     <!------------ Pokemon Card ------------>
@@ -94,15 +92,20 @@
 
         <v-card>
         <v-card-title
-          class="headline grey lighten-2"
           primary-title
           >
-          You're about to quit
+          You're about to give up
           </v-card-title>
 
           <v-card-text> You sure you want to go through with this?
           </v-card-text>
-
+            <v-img class="cardImage"
+            position="center"
+            height="200"
+            width="200"
+            src="https://media.tenor.com/images/194e03ce0d11e3372a660828b4b08df0/tenor.gif"
+        ></v-img>
+            
           <v-divider></v-divider>
 
           <v-card-actions>
@@ -141,7 +144,7 @@
 <script>
 import { pokemon } from './assets/pokedex'
 import colors from 'vuetify/lib/util/colors'
-import {VApp, VBtn, VCol, VDialog} from 'vuetify/lib'
+import {VApp, VBtn, VCol, VDialog, VCardActions,VDivider, VCardText, VBanner} from 'vuetify/lib'
 
 
 let player1 = Math.floor(Math.random() * 151) + 0;
@@ -156,7 +159,11 @@ export default {
     VApp,
     VBtn,
     VCol,
-    VDialog
+    VDialog,
+    VCardActions,
+    VDivider,
+    VCardText,
+    VBanner
   },
   data: function () {
     return {
@@ -276,7 +283,6 @@ export default {
   justify-content: center;
   font-size: 1.5rem;
 }
-
 
 #monsterCard {
   width: 50%;
