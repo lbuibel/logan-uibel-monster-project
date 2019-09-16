@@ -141,7 +141,7 @@
 <script>
 import { pokemon } from './assets/pokedex'
 import colors from 'vuetify/lib/util/colors'
-import {VApp, VBtn, VCol} from 'vuetify/lib'
+import {VApp, VBtn, VCol, VDialog} from 'vuetify/lib'
 
 
 let player1 = Math.floor(Math.random() * 151) + 0;
@@ -156,6 +156,7 @@ export default {
     VApp,
     VBtn,
     VCol,
+    VDialog
   },
   data: function () {
     return {
@@ -181,11 +182,13 @@ export default {
           this.gameIsRunning = true;
         },
         attack: function () {
+            var monster = this.monsterName;
+            var player = this.playerName;
             var damage = this.calculateDamage(3, 10);
             this.monsterHealth -= damage;
             this.turns.unshift({
                 isPlayer: true,
-                text: 'Player hits Monster for ' + damage
+                text: player + ' hits ' + monster + ' for ' + damage
             });
             if (this.checkWin()) {
                 return;
@@ -194,12 +197,13 @@ export default {
             this.monsterAttacks();
         },
        specialAttack: function () {
+            var monster = this.monsterName;
+            var player = this.playerName;
             var damage = this.calculateDamage(10, 20);
             this.monsterHealth -= damage;
-            console.log("monster health is " + this.monsterHealth)
             this.turns.unshift({
                 isPlayer: true,
-                text: 'Player hits Monster hard for ' + damage
+                text: player + ' hits ' + monster + ' hard for ' + damage
             });
             if (this.checkWin()) {
                 return;
@@ -207,6 +211,7 @@ export default {
             this.monsterAttacks();
         },
         heal: function () {
+          var player = this.playerName;
             if (this.playerHealth <= 90) {
                 this.playerHealth += 10;
             } else {
@@ -214,7 +219,7 @@ export default {
             }
             this.turns.unshift({
                 isPlayer: true,
-                text: 'player heals for 10'
+                text: player + ' heals for 10'
             });
             this.monsterAttacks();
         },
@@ -225,12 +230,14 @@ export default {
           location.reload();
         },
         monsterAttacks: function() {
+          var monster = this.monsterName;
+          var player = this.playerName;
             var damage = this.calculateDamage(5, 12);
             this.playerHealth -= damage;
             this.checkWin();
             this.turns.unshift({
                 isPlayer: false,
-              text: 'Monster hits Player for ' + damage
+              text: monster + ' hits ' + player + ' for ' + damage
             });
         },
         calculateDamage: function(min, max) {
