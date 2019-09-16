@@ -80,7 +80,6 @@
       <v-btn large rounded color="#4CAF50" @click="heal">HEAL</v-btn>
 
     <!-- Dialog box for running -->
-      <div class="text-center">
         <v-dialog
         v-model="dialog"
         width="500"
@@ -120,7 +119,6 @@
           </v-card-actions>
         </v-card>
        </v-dialog>
-      </div>
     </section>
 
     <!-- Attack Summary -->
